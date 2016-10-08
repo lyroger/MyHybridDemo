@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>App测试图片上传</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" name="viewport">
+  <meta http-equiv="Pragma" contect="no-cache">
+  <!-- 是否启用 WebApp 全屏模式 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <!-- 添加到主屏后的标题（iOS 6 新增） -->
+  <meta name="apple-mobile-web-app-title" content="">
+  <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+  <meta name="format-detection" content="telephone=no, email=no">
+  <!-- 启用360浏览器的极速模式(webkit) -->
+  <meta name="renderer" content="webkit">
+  <!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->
+  <meta name="HandheldFriendly" content="true">
+  <!-- uc强制竖屏 -->
+  <meta name="screen-orientation" content="portrait">
+  <!-- QQ强制竖屏 -->
+  <meta name="x5-orientation" content="portrait">
+  <!-- UC强制全屏 -->
+  <meta name="full-screen" content="yes">
+  <!-- QQ强制全屏 -->
+  <meta name="x5-fullscreen" content="true">
+  <!-- UC应用模式 -->
+  <meta name="browsermode" content="application">
+  <!-- QQ应用模式 -->
+  <meta name="x5-page-mode" content="app">
+  <!-- windows phone 点击无高光 -->
+  <meta name="msapplication-tap-highlight" content="no">
+<style type="text/css">
+	body{ font-family:'微软雅黑'; font-size:18px; margin:0; padding:0; text-align:center;}
+	input{ border:#666 solid 1px; border-radius:3px; width:50px; height:50px; margin cursor:pointer; font-size:28px; margin-top:50px; color:#666; background:#fff;}
+	
+</style>
+<script src="cordova.js"></script>
+<script src="cordova_plugins.js"></script>
+<script type="text/javascript">
+	window.onload=function(){
+        
+        var fileArray;
+		document.getElementById('getPhotoBtn').onclick=function(){
+            var maxCount = 6;//最多可以选择多少张图片
+			PhotoPickerPlugin.getPictures(function(images){
+                                          fileArray = images;
+                                          var _imgs='';
+                                          for(var i=0;i<images.length;i++){
+                                             _imgs+='<img src="'+images[i]+'" style="width:100px;heigth:100px">';
+                                          }
+                                          document.getElementById('imgs').innerHTML=_imgs;
+			},
+			function(msg){
+			  alert(msg);
+			},
+		 maxCount);
+		}
+        document.getElementById('deletePhotoBtn').onclick=function(){
+            PhotoPickerPlugin.deleteFile(function(success){
+                                             alert(success);
+                                             var _imgs='';
+                                             for(var i=0;i<fileArray.length;i++){
+                                                _imgs+='<img src="'+fileArray[i]+'" style="width:100px;heigth:100px">';
+                                             }
+                                             document.getElementById('imgs').innerHTML=_imgs;
+                                             fileArray = [];
+                                          },
+                                          function(msg){
+                                             alert(msg);
+                                          },
+                                          fileArray);
+        }
+    }
+</script>
+</head>
+
+<body>
+    <input type="button" id="deletePhotoBtn" style="width:100px;heigth:30px;font-size:16px;" value="删除图片">
+    <input type="button" id="getPhotoBtn" style="width:100px;heigth:30px;font-size:16px;" value="选择图片">
+    <div id="imgs"></div>
+</body>
+</html>
